@@ -377,6 +377,7 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem">Problem</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solution">Solution</a></li>
 </ul>
             </nav>
         </div>
@@ -394,6 +395,15 @@ document.write(`
 <section id="problem">
 <h2>Problem<a class="headerlink" href="#problem" title="Link to this heading">#</a></h2>
 <p>Imagine there a dataset only changes a few times a week. It’s also a very slowly evolving entity with the total number of rows not excedding 1 million. Unfortunately, <code class="docutils literal notranslate"><span class="pre">the</span> <span class="pre">data</span> <span class="pre">provide</span> <span class="pre">doesn't</span> <span class="pre">define</span> <span class="pre">any</span> <span class="pre">attribute</span> <span class="pre">that</span> <span class="pre">could</span> <span class="pre">help</span> <span class="pre">detect</span> <span class="pre">changed</span> <span class="pre">rows</span> <span class="pre">since</span> <span class="pre">the</span> <span class="pre">last</span> <span class="pre">ingestion.</span></code></p>
+</section>
+<section id="solution">
+<h2>Solution<a class="headerlink" href="#solution" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Because</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">lack</span> <span class="pre">of</span> <span class="pre">last</span> <span class="pre">updated</span> <span class="pre">value</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">dataset</span></code>, Full Loader pattern is an ideal solution to the problem.</p>
+<p>The simplest implmentation relies on 2 steps, the extract and load (EL). It uses native data stores commands to export data from one database, and import it to another.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This EL approach is ideal for homogenous data stores because it doesn’t require any data transformation.</p>
+</div>
 </section>
 </section>
 
@@ -453,6 +463,7 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem">Problem</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solution">Solution</a></li>
 </ul>
   </nav></div>
 
