@@ -378,6 +378,11 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem">Problem</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solution">Solution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#consequences">Consequences</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-volume">Data Volume</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-consistency">Data Consistency</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -402,8 +407,50 @@ document.write(`
 <p>The simplest implmentation relies on 2 steps, the extract and load (EL). It uses native data stores commands to export data from one database, and import it to another.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This EL approach is ideal for homogenous data stores because it doesn’t require any data transformation.</p>
+<p>This EL approach is ideal for homogenous data stores because it doesn’t require any data transformation. Extract Load jobs are also known as passthrough jobs because the data is simply passing through the pipeline, from the source to the destination.</p>
 </div>
+<p>However, this might not be ideal for the case that you need to load data between heterogeneous databases. For example, from a SQL Server to a PostgreSQL database. You then need to create a thing layer between the extract and load steps, the transformation step (ETL).</p>
+</section>
+<section id="consequences">
+<h2>Consequences<a class="headerlink" href="#consequences" title="Link to this heading">#</a></h2>
+<section id="data-volume">
+<h3>Data Volume<a class="headerlink" href="#data-volume" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>The FL implementation will often be batch jobs running <strong>at some regular schedule</strong>. So, if the data volume grow slowly, your infrastructure will be just fine with any issue for long time thansk to this almost constant compute needs.</p></li>
+<li><p>However, for more <strong>dynamically evolving</strong> dataset; it can lead to some issues if you use static compute resources to process it. For example, if the dataset doubles in size from one day to another, the ingestion process will be slower and can even fail due to static hardware limitations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">You</span> <span class="pre">should</span> <span class="pre">leverage</span> <span class="pre">severless</span> <span class="pre">services</span> <span class="pre">or</span> <span class="pre">auto-scaling</span> <span class="pre">capabilities</span> <span class="pre">to</span> <span class="pre">avoid</span> <span class="pre">this</span> <span class="pre">issue.</span></code></p></li>
+</ul>
+</section>
+<section id="data-consistency">
+<h3>Data Consistency<a class="headerlink" href="#data-consistency" title="Link to this heading">#</a></h3>
+<p><img alt="Database view" src="artifacts/Screenshot%202025-02-26%20at%2023.44.06.png" /></p>
+<ul class="simple">
+<li><p>When data must be completely overwritten during ingestion, several issues may arise:</p>
+<ul>
+<li><p>Concurrent operations: If data consumers query while ingestion is running, they might receive partial or missing data until the operation completes</p>
+<ul>
+<li><p>Mitigation options:</p>
+<ul>
+<li><p>Use transactions: The best solution when available, as they manage data visibility automatically</p></li>
+<li><p>Use views as abstraction layers: For data stores without transaction support, create a view that consumers query while updating underlying tables</p>
+<ul>
+<li><p>Implementation example: Maintain two technical tables and switch between them during updates to ensure data remains available to consumers throughout the process</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Second, keep in mind that you might need to use the previous version of the dataset in case of any unexpected issue.</p>
+<ul>
+<li><p>If you fully overwrite your dataset, you might not be able to perform this action, unless you use a format supporting the time travel feature, such as <code class="docutils literal notranslate"><span class="pre">Delta</span> <span class="pre">Lake,</span> <span class="pre">Apache</span> <span class="pre">Iceberg,</span> <span class="pre">or</span> <span class="pre">yet</span> <span class="pre">GCP</span> <span class="pre">BigQuery</span></code>.</p></li>
+<li><p>Eventually, you can also implement the feature on your own by relying on the same single data exposition abstraction concept presented in Figure 2-1.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 </section>
 </section>
 
@@ -464,6 +511,11 @@ document.write(`
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem">Problem</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solution">Solution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#consequences">Consequences</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-volume">Data Volume</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-consistency">Data Consistency</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
