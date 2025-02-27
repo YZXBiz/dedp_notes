@@ -1,0 +1,8 @@
+format: jb-book
+root: README.md
+parts:
+  - caption: "Data Ingestion Design Patterns"
+    # numbered: true
+    chapters:
+      - file: Data_Ingestion/FullLoad.md
+        title: "Full Load"
