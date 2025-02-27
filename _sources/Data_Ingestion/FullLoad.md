@@ -49,3 +49,7 @@ However, this might not be ideal for the case that you need to load data between
     - Eventually, you can also implement the feature on your own by relying on the same single data exposition abstraction concept presented in Figure 2-1.
 
 ## Examples 
+- If you ingest a dataset between two identical or compatible data stores, you can simply write a script and deploy to your runtime service. 
+```{code-cell} ipython3
+aws s3 sync s3://input-bucket s3://output-bucket --delete
+```
