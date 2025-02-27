@@ -37,7 +37,7 @@ However, this might not be ideal for the case that you need to load data between
 - `You should leverage severless services or auto-scaling capabilities to avoid this issue.`
 
 ### Data Consistency
-![Database view](../artifacts/Screenshot%202025-02-26%20at%2023.44.06.png)
+![Database view](artifacts/database_view.png)
 - When data must be completely overwritten during ingestion, several issues may arise:
   - Concurrent operations: If data consumers query while ingestion is running, they might receive partial or missing data until the operation completes
     - Mitigation options:
@@ -47,3 +47,5 @@ However, this might not be ideal for the case that you need to load data between
   - Second, keep in mind that you might need to use the previous version of the dataset in case of any unexpected issue. 
     - If you fully overwrite your dataset, you might not be able to perform this action, unless you use a format supporting the time travel feature, such as `Delta Lake, Apache Iceberg, or yet GCP BigQuery`. 
     - Eventually, you can also implement the feature on your own by relying on the same single data exposition abstraction concept presented in Figure 2-1.
+
+## Examples 
